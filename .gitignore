@@ -15,3 +15,8 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+# Local binaries and archives
+bin/
+*.zip
+*.tar.gz
