@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="banner.jpg?v=3" alt="Spit Combat Banner" width="800">
+  <img src="banner_v2.jpg" alt="Spit Combat Banner" width="800">
 
   <h1>💦 Spit Combat 💦</h1>
 
@@ -72,7 +72,7 @@ Reaching the score threshold spawns a unique boss for the level, featuring a **r
 ├── style.css                   # Doodle art style visuals and button animations
 ├── game.js                     # Core game logic, Canvas physics, collision, boss AI
 ├── 啟動遊戲伺服器.command      # macOS 1-click server launch script
-├── banner.jpg                  # README decorative banner
+├── banner_v2.jpg               # README decorative banner
 ├── landlord.jpg                # Landlord Boss AI sprite (transparent)
 ├── influencer.jpg              # Influencer Boss AI sprite (transparent)
 ├── player.jpg                  # Player hand-drawn sprite

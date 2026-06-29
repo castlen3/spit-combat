@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="banner.jpg?v=3" alt="Spit Combat Banner" width="800">
+  <img src="banner_v2.jpg" alt="Spit Combat Banner" width="800">
 
   <h1>💦 吐痰大作戰 (Spit Combat) 💦</h1>
 
@@ -72,7 +72,7 @@
 ├── style.css                   # Doodle (塗鴉) 風格視覺與按鈕動畫
 ├── game.js                     # 遊戲主邏輯、Canvas 物理引擎、碰撞判定、魔王 AI
 ├── 啟動遊戲伺服器.command      # macOS 雙擊一鍵啟動伺服器腳本
-├── banner.jpg                  # README 裝飾橫幅圖
+├── banner_v2.jpg               # README 裝飾橫幅圖
 ├── landlord.jpg                # 房東魔王 AI 精美繪圖 (已去背)
 ├── influencer.jpg              # 網紅魔王 AI 精美繪圖 (已去背)
 ├── player.jpg                  # 主角手繪線稿圖
