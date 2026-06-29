@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="banner.jpg?v=2" alt="Spit Combat Banner" width="800">
+  <img src="banner.jpg?v=3" alt="Spit Combat Banner" width="800">
 
   <h1>💦 Spit Combat 💦</h1>
 
