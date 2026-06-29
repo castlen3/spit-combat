@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>痰指之間 (Spit Combat)</title>
+  <!-- Google Fonts for doodle/cartoon look -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+    <!-- Header UI -->
+    <header class="game-header">
+      <h1 class="game-title">痰指之間 <span class="subtitle">Spit Combat</span></h1>
+      <div class="stats-panel">
+        <div class="stat-item" id="score-container">
+          <span class="label">分數:</span>
+          <span class="value" id="score-val">0</span>
+        </div>
+        <div class="stat-item" id="hp-container">
+          <span class="label">水分 (HP):</span>
+          <div class="hp-bar-outer">
+            <div class="hp-bar-inner" id="hp-bar"></div>
+          </div>
+          <span class="value" id="hp-val">10/10</span>
+        </div>
+        <div class="stat-item" id="wind-container">
+          <span class="label">風向:</span>
+          <div class="wind-indicator">
+            <span id="wind-arrow">→</span>
+            <span id="wind-speed">0 m/s</span>
+          </div>
+        </div>
+        <div class="stat-item" id="level-container">
+          <span class="label">關卡:</span>
+          <span class="value" id="level-val">1/3</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Game Area -->
+    <div class="canvas-wrapper">
+      <canvas id="gameCanvas" width="800" height="600"></canvas>
+      
+      <!-- Power Bar Overlay (Floating near the window/player) -->
+      <div id="power-bar-container" class="hidden">
+        <div id="power-bar-fill"></div>
+        <div class="power-marker"></div>
+      </div>
+
+      <!-- Welcome / Start Screen -->
+      <div id="start-screen" class="overlay-screen">
+        <div class="doodle-card">
+          <h2>💦 痰指之間 💦</h2>
+          <p class="tagline">站在公寓高樓的窗邊，考驗你的精準拋物線！</p>
+          <div class="rules-box">
+            <h3>🎮 遊戲規則</h3>
+            <ul>
+              <li>使用 <strong>A / D 鍵</strong> 或 <strong>左右方向鍵 ◀ / ▶</strong> 移動窗台位置。</li>
+              <li>按住 <strong>空白鍵 (Space)</strong> 進行蓄力，放開後朝下吐痰！</li>
+              <li>命中 <strong>討厭的壞人</strong> 可以獲得高分！</li>
+              <li>❌ 命中 <strong>孕婦、抱小孩家長、氣球小孩</strong> 會被扣分扣血！</li>
+              <li>⚠️ 如果 <strong>完全沒吐中任何人</strong> (掉在地上)，會因為口乾舌燥扣 1 點血！</li>
+              <li>👹 每關最後會有 <strong>BOSS 魔王</strong>，必須擊中他們的 <strong>重點弱點</strong> 才能贏！</li>
+            </ul>
+          </div>
+          <button id="start-btn" class="action-btn">開始狙擊！</button>
+        </div>
+      </div>
+
+      <!-- Game Over Screen -->
+      <div id="game-over-screen" class="overlay-screen hidden">
+        <div class="doodle-card warning">
+          <h2>💀 口乾舌燥！遊戲結束 💀</h2>
+          <p>你因為隨地吐痰且屢屢失手，或是激怒了不該惹的人...</p>
+          <div class="final-stats">
+            <p>最終得分：<span id="final-score">0</span></p>
+            <p>挑戰關卡：<span id="final-level">1</span></p>
+          </div>
+          <button id="restart-btn" class="action-btn">再吐一次！</button>
+        </div>
+      </div>
+
+      <!-- Level Clear / Shop Screen -->
+      <div id="shop-screen" class="overlay-screen hidden">
+        <div class="doodle-card shop">
+          <h2>🎉 關卡完成！痰神商店 🎉</h2>
+          <p>用你的分數來升級口水化學成分吧！</p>
+          <div class="shop-items">
+            <div class="shop-item" id="buy-chili">
+              <span class="emoji">🌶️</span>
+              <div class="item-info">
+                <h4>麻辣火鍋 (Chili Spit)</h4>
+                <p>吐出火紅痰，落地產生爆炸濺射 (AOE) 範圍效果。</p>
+              </div>
+              <button class="buy-btn" data-item="chili" data-price="200">200 分</button>
+            </div>
+            <div class="shop-item" id="buy-boba">
+              <span class="emoji">🧋</span>
+              <div class="item-info">
+                <h4>珍珠奶茶 (Boba Shotgun)</h4>
+                <p>雙發齊射！一次射出兩顆珍珠，範圍覆蓋加倍。</p>
+              </div>
+              <button class="buy-btn" data-item="boba" data-price="350">350 分</button>
+            </div>
+            <div class="shop-item" id="buy-cola">
+              <span class="emoji">🥤</span>
+              <div class="item-info">
+                <h4>可樂加薄荷糖 (Mentos Cola)</h4>
+                <p>超高初速！吐痰速度極快，且幾乎不受風力影響。</p>
+              </div>
+              <button class="buy-btn" data-item="cola" data-price="300">300 分</button>
+            </div>
+          </div>
+          <button id="next-level-btn" class="action-btn">前往下一關 ➡️</button>
+        </div>
+      </div>
+
+      <!-- Victory Screen (All Levels Beaten) -->
+      <div id="victory-screen" class="overlay-screen hidden">
+        <div class="doodle-card victory">
+          <h2>🏆 恭喜！你已成為「一代痰神」 🏆</h2>
+          <p>你成功擊敗了所有的惡房東、自戀網紅與清潔車，稱霸整條街！</p>
+          <div class="final-stats">
+            <p>傳奇得分：<span id="victory-score">0</span></p>
+          </div>
+          <button id="play-again-btn" class="action-btn">重溫傳奇！</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Instructions & Audio toggle footer -->
+    <footer class="game-footer">
+      <div class="control-hints">
+        <span>[A / D / ◀ / ▶] 移動</span>
+        <span>[空白鍵] 蓄力/發射</span>
+      </div>
+      <button id="audio-toggle-btn" class="audio-btn">🔊 音效: 開</button>
+    </footer>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>

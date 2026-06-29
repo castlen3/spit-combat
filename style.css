@@ -1,0 +1,388 @@
+/* Main CSS Reset & Stylesheet for Spit Combat */
+:root {
+  --bg-color: #0b0f19;
+  --panel-bg: rgba(18, 25, 41, 0.75);
+  --border-color: #f1f3f9;
+  --text-color: #f1f3f9;
+  --accent-color: #ffd23f;
+  --danger-color: #ff5e5b;
+  --success-color: #4cd964;
+  --doodle-border: 4px solid #1a1a2e;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Fredoka', 'Gaegu', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+  user-select: none;
+}
+
+#game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 900px;
+  width: 100%;
+  padding: 10px;
+}
+
+/* Header & HUD Styling with glassmorphism */
+.game-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  background: var(--panel-bg);
+  backdrop-filter: blur(10px);
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 12px 24px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.game-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+.game-title .subtitle {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Fredoka', sans-serif;
+}
+
+.stats-panel {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.95rem;
+}
+
+.stat-item .label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.stat-item .value {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+/* Water / HP Bar Styling */
+.hp-bar-outer {
+  width: 120px;
+  height: 14px;
+  background: rgba(255,255,255,0.1);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.hp-bar-inner {
+  width: 100%;
+  height: 100%;
+  background: #3a86c8;
+  box-shadow: 0 0 8px #3a86c8;
+  transition: width 0.3s ease-in-out;
+}
+
+.wind-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.1rem;
+}
+
+#wind-arrow {
+  display: inline-block;
+  font-size: 1.4rem;
+  transform-origin: center;
+  transition: transform 0.5s ease-out;
+  color: var(--accent-color);
+}
+
+/* Canvas Wrapper with screens */
+.canvas-wrapper {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  border: 4px solid rgba(255, 255, 255, 0.15);
+}
+
+canvas {
+  display: block;
+  background: #f7f3e9; /* Light paper/sketchbook background for doodle style */
+}
+
+/* Float charging bar overlay */
+#power-bar-container {
+  position: absolute;
+  width: 20px;
+  height: 100px;
+  background: rgba(0,0,0,0.5);
+  border: 2px solid #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+#power-bar-fill {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(to top, var(--success-color), var(--accent-color), var(--danger-color));
+  transition: height 0.05s linear;
+}
+
+/* Screen overlays: Glassmorphism and Doodle boards */
+.overlay-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(11, 15, 25, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+  display: none !important;
+}
+
+/* Doodle-style Card UI */
+.doodle-card {
+  background: #ffffff;
+  color: #1a1a2e;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; /* Sketchy hand-drawn border effect */
+  border: 4px solid #1a1a2e;
+  box-shadow: 8px 8px 0px #1a1a2e;
+  text-align: center;
+  animation: floatCard 4s ease-in-out infinite alternate;
+}
+
+@keyframes floatCard {
+  0% { transform: translateY(0) rotate(-0.5deg); }
+  100% { transform: translateY(-8px) rotate(1deg); }
+}
+
+.doodle-card h2 {
+  font-size: 2.2rem;
+  margin-bottom: 12px;
+  color: #1a1a2e;
+  text-shadow: 1px 1px 0 #ffd23f;
+}
+
+.doodle-card.warning {
+  border-color: var(--danger-color);
+  box-shadow: 8px 8px 0px var(--danger-color);
+}
+.doodle-card.warning h2 {
+  color: var(--danger-color);
+}
+
+.doodle-card.victory {
+  border-color: #ffd23f;
+  box-shadow: 8px 8px 0px #ffd23f;
+}
+.doodle-card.victory h2 {
+  color: #c99a00;
+}
+
+.tagline {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  font-style: italic;
+  color: #555;
+}
+
+.rules-box {
+  text-align: left;
+  background: #f7f3e9;
+  border: 2px dashed #888;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 24px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.rules-box h3 {
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.rules-box ul {
+  padding-left: 20px;
+}
+
+.rules-box li {
+  margin-bottom: 6px;
+}
+
+/* Button with sketchy border and pop effects */
+.action-btn {
+  background: var(--accent-color);
+  color: #1a1a2e;
+  border: 3px solid #1a1a2e;
+  padding: 12px 28px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  border-radius: 80px 15px 95px 20px/100px 19px 70px 10px; /* Sketchy button */
+  cursor: pointer;
+  box-shadow: 4px 4px 0px #1a1a2e;
+  transition: all 0.1s ease;
+  font-family: inherit;
+}
+
+.action-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #1a1a2e;
+  background: #ffdf70;
+}
+
+.action-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0px #1a1a2e;
+}
+
+/* Shop UI specific */
+.shop-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.shop-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: #f7f3e9;
+  border: 2px solid #1a1a2e;
+  border-radius: 12px;
+  padding: 10px 15px;
+  transition: transform 0.2s ease;
+}
+
+.shop-item:hover {
+  transform: scale(1.02);
+}
+
+.shop-item .emoji {
+  font-size: 2.2rem;
+}
+
+.shop-item .item-info {
+  flex-grow: 1;
+}
+
+.shop-item h4 {
+  font-size: 1.05rem;
+  margin-bottom: 2px;
+}
+
+.shop-item p {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.buy-btn {
+  background: #ffd23f;
+  border: 2px solid #1a1a2e;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.buy-btn:hover:not(:disabled) {
+  background: #4cd964;
+  color: #fff;
+}
+
+.buy-btn:disabled {
+  background: #ccc;
+  color: #888;
+  cursor: not-allowed;
+  border-color: #888;
+}
+
+.final-stats {
+  margin: 15px 0 25px;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+/* Footer Styling */
+.game-footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.audio-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border-radius: 8px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.audio-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Hide wind indicator and power bar containers */
+#wind-container, #power-bar-container {
+  display: none !important;
+}
